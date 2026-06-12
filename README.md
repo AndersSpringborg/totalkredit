@@ -32,8 +32,8 @@ uv run totalkredit-scraper
 ## Container
 
 ```bash
-docker build -t totalkredit:local .
-docker run --rm --env-file .env -v "$PWD/data:/data" totalkredit:local
+docker build -t totalkredit:local -t totalkredit:latest .
+docker run --rm --env-file .env -v "$PWD/data:/data" totalkredit:latest
 ```
 
 ## k3s
