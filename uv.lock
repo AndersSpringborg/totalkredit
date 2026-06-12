@@ -219,7 +219,7 @@ wheels = [
 [[package]]
 name = "totalkredit"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "opentelemetry-api" },
     { name = "opentelemetry-exporter-otlp-proto-http" },

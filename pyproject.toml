@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "totalkredit"
 version = "0.1.0"
@@ -13,3 +17,6 @@ dependencies = [
 
 [project.scripts]
 totalkredit-scraper = "src.scraper:main"
+
+[tool.setuptools.packages.find]
+include = ["src*"]
