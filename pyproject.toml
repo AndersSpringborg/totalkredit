@@ -1,0 +1,15 @@
+[project]
+name = "totalkredit"
+version = "0.1.0"
+description = "Totalkredit bond price scraper"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "opentelemetry-api>=1.28.0",
+    "opentelemetry-exporter-otlp-proto-http>=1.28.0",
+    "opentelemetry-sdk>=1.28.0",
+    "requests>=2.32.3",
+]
+
+[project.scripts]
+totalkredit-scraper = "src.scraper:main"

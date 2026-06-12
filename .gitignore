@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local env/config
+.env
+.env.*
+!.env.example
+
+# Runtime data
+data/
+*.jsonl
+
+# OS/editor
+.DS_Store
+.idea/
+.vscode/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Task notes
+tasks/
