@@ -171,7 +171,7 @@ def save_prices(
 
 
 def format_results_line(data: list[dict[str, str | float | bool | None]]) -> str:
-    """Format all scraped rates as one log line for k9s."""
+    """Format all scraped rates as one compact log line."""
     result_date = data[0].get("last_updated") or data[0].get("timestamp")
     rates = " | ".join(
         f"{item['lifetime']} {item['loan_type']}={float(item['cash_interest_percent']):.2f}%"

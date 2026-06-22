@@ -35,7 +35,7 @@ spec:
                   mountPath: /data
           containers:
             - name: scraper
-              image: ghcr.io/andersspringborg/totalkredit:latest
+              image: totalkredit:latest
               imagePullPolicy: Always
               env:
                 - name: DATA_DIR

@@ -1,6 +1,6 @@
 # Totalkredit scraper
 
-Scrapes Totalkredit Tilpasningslån cash interest rates and fixed-rate loan prices, appends them to `totalkredit_rates.jsonl`, and publishes metrics via OTLP when `OTEL_EXPORTER_OTLP_ENDPOINT` is set. Logs only the Tilpasningslån summary line to keep k9s output easy to follow.
+Scrapes Totalkredit Tilpasningslån cash interest rates and fixed-rate loan prices, appends them to `totalkredit_rates.jsonl`, and can publish metrics via OTLP.
 
 ## Configuration
 
@@ -13,7 +13,7 @@ cp .env.example .env
 Supported variables:
 
 - `DATA_DIR` — output directory for `totalkredit_rates.jsonl`.
-- `OTEL_EXPORTER_OTLP_ENDPOINT` — optional OTLP HTTP metrics endpoint. Leave unset/empty locally to skip metric publishing.
+- `OTEL_EXPORTER_OTLP_ENDPOINT` — optional OTLP HTTP metrics endpoint. Leave unset/empty to skip metric publishing.
 
 ## Run locally with uv
 
@@ -32,10 +32,39 @@ uv run totalkredit-scraper
 ## Container
 
 ```bash
-docker build -t totalkredit:local -t totalkredit:latest .
-docker run --rm --env-file .env -v "$PWD/data:/data" totalkredit:latest
+docker build -t totalkredit:local .
+docker run --rm --env-file .env -v "$PWD/data:/data" totalkredit:local
 ```
 
-## k3s
+## Kubernetes
 
-Kubernetes manifests are in `kubernetes/totalkredit`. Copy/sync that directory into `~/dev-project/pi-cluster/kubernetes/totalkredit`, update the image tag in `kustomization.yaml`, then apply with kustomize.
+Kustomize manifests are in `kubernetes/`.
+
+The default Kustomize config points at the public image for this repository:
+
+```yaml
+images:
+  - name: totalkredit
+    newName: ghcr.io/andersspringborg/totalkredit
+    newTag: latest
+```
+
+If you fork the project or publish your own image, update `images[].newName` in `kubernetes/kustomization.yaml`.
+
+OTEL metrics are configured in `kubernetes/kustomization.yaml` too:
+
+- Set `OTEL_EXPORTER_OTLP_ENDPOINT` and `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` if you want metric publishing.
+- Leave the OTEL endpoint values empty to run without metrics.
+
+Render and apply:
+
+```bash
+kubectl kustomize kubernetes
+kubectl apply -k kubernetes
+```
+
+The default PersistentVolumeClaim uses your cluster's default storage class. Add `storageClassName` to `kubernetes/01-pvc.yaml` if your cluster requires one.
+
+## Grafana
+
+A Grafana dashboard example is available at `grafana/dashboard.json`. Import it into Grafana and point the panels at the Prometheus-compatible datasource that receives the scraper's OTLP metrics.
