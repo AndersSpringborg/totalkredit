@@ -40,12 +40,9 @@ spec:
               env:
                 - name: DATA_DIR
                   value: "/data"
-                - name: OTEL_EXPORTER_OTLP_PROTOCOL
-                  value: http/protobuf
-                - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
-                  value: http://victoria-victoria-metrics-single-server.metrics.svc.cluster.local:8428/opentelemetry/v1/metrics
-                - name: OTEL_EXPORTER_OTLP_ENDPOINT
-                  value: http://victoria-victoria-metrics-single-server.metrics.svc.cluster.local:8428/opentelemetry/v1/metrics
+              envFrom:
+                - configMapRef:
+                    name: totalkredit-scraper-otel
               volumeMounts:
                 - name: scraper-data
                   mountPath: /data

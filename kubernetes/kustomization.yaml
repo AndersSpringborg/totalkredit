@@ -7,3 +7,10 @@ resources:
   - 00-namespace.yaml
   - 01-pvc.yaml
   - 02-cronjob.yaml
+
+configMapGenerator:
+  - name: totalkredit-scraper-otel
+    literals:
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://victoria-victoria-metrics-single-server.metrics.svc.cluster.local:8428/opentelemetry/v1/metrics
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://victoria-victoria-metrics-single-server.metrics.svc.cluster.local:8428/opentelemetry/v1/metrics
