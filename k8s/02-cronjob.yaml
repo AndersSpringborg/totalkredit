@@ -1,0 +1,55 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: totalkredit-scraper
+  namespace: totalkredit
+spec:
+  schedule: "0 14 * * *"
+  timeZone: "Europe/Copenhagen"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        metadata:
+          labels:
+            app: totalkredit-scraper
+        spec:
+          restartPolicy: OnFailure
+          securityContext:
+            fsGroup: 10001
+            fsGroupChangePolicy: OnRootMismatch
+          initContainers:
+            - name: fix-data-permissions
+              image: busybox:1.36
+              command:
+                - sh
+                - -c
+                - chown -R 10001:10001 /data && chmod -R u+rwX,g+rwX /data
+              securityContext:
+                runAsUser: 0
+              volumeMounts:
+                - name: scraper-data
+                  mountPath: /data
+          containers:
+            - name: scraper
+              image: ghcr.io/andersspringborg/totalkredit:latest
+              imagePullPolicy: Always
+              env:
+                - name: DATA_DIR
+                  value: "/data"
+                - name: OTEL_EXPORTER_OTLP_PROTOCOL
+                  value: http/protobuf
+                - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+                  value: http://victoria-victoria-metrics-single-server.metrics.svc.cluster.local:8428/opentelemetry/v1/metrics
+                - name: OTEL_EXPORTER_OTLP_ENDPOINT
+                  value: http://victoria-victoria-metrics-single-server.metrics.svc.cluster.local:8428/opentelemetry/v1/metrics
+              volumeMounts:
+                - name: scraper-data
+                  mountPath: /data
+          volumes:
+            - name: scraper-data
+              persistentVolumeClaim:
+                claimName: totalkredit-data-pvc
