@@ -4,7 +4,7 @@ metadata:
   name: totalkredit-scraper
   namespace: totalkredit
 spec:
-  schedule: "0 14 * * *"
+  schedule: "15 8 * * *"
   timeZone: "Europe/Copenhagen"
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3

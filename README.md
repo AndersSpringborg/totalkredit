@@ -1,6 +1,6 @@
 # Totalkredit scraper
 
-Scrapes Totalkredit Tilpasningslån cash interest rates and fixed-rate loan prices, appends them to `totalkredit_rates.jsonl`, and can publish metrics via OTLP.
+Scrapes all Totalkredit data shown on `kurser-og-priser`: fixed-rate payout prices, variable-rate/F-kort payout prices, Tilpasningslån cash interest, and all redemption groups (Fast rente, F-kort, RenteMax, CIBOR3, CIBOR6, Tilpasningslån). Rows are appended to `totalkredit_rates.jsonl`, and numeric values can be published as OTLP metrics.
 
 ## Configuration
 
@@ -68,3 +68,5 @@ The default PersistentVolumeClaim uses your cluster's default storage class. Add
 ## Grafana
 
 A Grafana dashboard example is available at `grafana/dashboard.json`. Import it into Grafana and point the panels at the Prometheus-compatible datasource that receives the scraper's OTLP metrics.
+
+The dashboard has a graph plus an adjacent latest-value table for each scraped section/subsection, including F-kort and the redemption groups.
